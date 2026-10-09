@@ -1,3 +1,7 @@
+import os
+from typing import Any, Callable
+
+
 class BankAccount:
     """Класс банковского счета с операциями пополнения и снятия (Средняя № 3)."""
 
@@ -33,6 +37,7 @@ class BankAccount:
     def __repr__(self) -> str:
         return f"BankAccount(owner='{self.owner}', balance={self._balance:.2f})"
 
+
 class Animal:
     """Базовый класс животного (Средняя № 5)."""
 
@@ -67,7 +72,7 @@ class Dog(Animal):
 
     def fetch(self, item: str) -> str:
         """Специфичное поведение собаки."""
-        return f"{self.name} приносит {item}!"import os
+        return f"{self.name} приносит {item}!"
 
 
 class FileManager:
@@ -102,6 +107,7 @@ class FileManager:
             os.remove(self.filepath)
             return True
         return False
+
 
 class Product:
     """Класс товара (Повышенная № 3)."""
@@ -146,6 +152,7 @@ class Cart:
     def get_items(self) -> list[tuple[Product, int]]:
         """Получение списка позиций корзины."""
         return list(self._items.items())
+
 
 class Table:
     """Мини-ORM класс таблицы с методами insert и select (Повышенная № 7)."""
