@@ -32,3 +32,39 @@ class BankAccount:
 
     def __repr__(self) -> str:
         return f"BankAccount(owner='{self.owner}', balance={self._balance:.2f})"
+
+class Animal:
+    """Базовый класс животного (Средняя № 5)."""
+
+    def __init__(self, name: str, age: int) -> None:
+        if not name or not isinstance(name, str):
+            raise ValueError("Имя животного не может быть пустым.")
+        if age < 0:
+            raise ValueError("Возраст не может быть отрицательным.")
+        self.name: str = name
+        self.age: int = int(age)
+
+    def speak(self) -> str:
+        """Базовый метод воспроизведения звука."""
+        return f"{self.name} издает звук."
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(name='{self.name}', age={self.age})"
+
+
+class Dog(Animal):
+    """Класс собаки, наследующий класс животного (Средняя № 5)."""
+
+    def __init__(self, name: str, age: int, breed: str) -> None:
+        super().__init__(name, age)
+        if not breed or not isinstance(breed, str):
+            raise ValueError("Порода собаки должна быть непустой строкой.")
+        self.breed: str = breed
+
+    def speak(self) -> str:
+        """Переопределенный звук собаки."""
+        return f"{self.name} говорит Гав!"
+
+    def fetch(self, item: str) -> str:
+        """Специфичное поведение собаки."""
+        return f"{self.name} приносит {item}!"
