@@ -102,3 +102,47 @@ class FileManager:
             os.remove(self.filepath)
             return True
         return False
+
+class Product:
+    """Класс товара (Повышенная № 3)."""
+
+    def __init__(self, name: str, price: float) -> None:
+        if not name or not isinstance(name, str):
+            raise ValueError("Название товара не может быть пустым.")
+        if price < 0:
+            raise ValueError("Цена товара не может быть отрицательной.")
+        self.name: str = name
+        self.price: float = float(price)
+
+    def __repr__(self) -> str:
+        return f"Product(name='{self.name}', price={self.price:.2f})"
+
+
+class Cart:
+    """Класс корзины заказов (Повышенная № 3)."""
+
+    def __init__(self) -> None:
+        self._items: dict[Product, int] = {}
+
+    def add_product(self, product: Product, quantity: int = 1) -> None:
+        """Добавление товара в корзину."""
+        if not isinstance(product, Product):
+            raise TypeError("Товар должен быть объектом класса Product.")
+        if quantity <= 0:
+            raise ValueError("Количество товара должно быть больше 0.")
+        self._items[product] = self._items.get(product, 0) + quantity
+
+    def remove_product(self, product_name: str) -> None:
+        """Удаление товара из корзины по наименованию."""
+        target = next((item for item in self._items if item.name == product_name), None)
+        if target is None:
+            raise ValueError(f"Товар '{product_name}' отсутствует в корзине.")
+        del self._items[target]
+
+    def calculate_total(self) -> float:
+        """Расчет суммарной стоимости товаров в корзине."""
+        return sum(item.price * qty for item, qty in self._items.items())
+
+    def get_items(self) -> list[tuple[Product, int]]:
+        """Получение списка позиций корзины."""
+        return list(self._items.items())
