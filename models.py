@@ -146,3 +146,41 @@ class Cart:
     def get_items(self) -> list[tuple[Product, int]]:
         """Получение списка позиций корзины."""
         return list(self._items.items())
+
+class Table:
+    """Мини-ORM класс таблицы с методами insert и select (Повышенная № 7)."""
+
+    def __init__(self, name: str, schema: list[str]) -> None:
+        if not name or not isinstance(name, str):
+            raise ValueError("Имя таблицы должно быть непустой строкой.")
+        if not schema:
+            raise ValueError("Схема таблицы должна содержать хотя бы одно поле.")
+        self.name: str = name
+        self.schema: list[str] = list(schema)
+        self._records: list[dict[str, Any]] = []
+        self._auto_id: int = 1
+
+    def insert(self, record: dict[str, Any]) -> dict[str, Any]:
+        """Вставка записи с проверкой соответствия схеме."""
+        if not isinstance(record, dict):
+            raise TypeError("Запись должна быть словарем.")
+        for field in self.schema:
+            if field not in record:
+                raise ValueError(f"Отсутствует обязательное поле схемы: '{field}'.")
+        row = {"id": self._auto_id, **record}
+        self._auto_id += 1
+        self._records.append(row)
+        return row.copy()
+
+    def select(self, predicate: Callable[[dict[str, Any]], bool] | None = None, **kwargs: Any) -> list[dict[str, Any]]:
+        """Выборка записей по полям или кастомному предикату."""
+        rows = self._records
+        if kwargs:
+            rows = [row for row in rows if all(row.get(k) == v for k, v in kwargs.items())]
+        if predicate is not None:
+            rows = [row for row in rows if predicate(row)]
+        return [row.copy() for row in rows]
+
+    def all(self) -> list[dict[str, Any]]:
+        """Возвращает копию всех записей."""
+        return [row.copy() for row in self._records]
