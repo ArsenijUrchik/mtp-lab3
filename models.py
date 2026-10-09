@@ -67,4 +67,38 @@ class Dog(Animal):
 
     def fetch(self, item: str) -> str:
         """Специфичное поведение собаки."""
-        return f"{self.name} приносит {item}!"
+        return f"{self.name} приносит {item}!"import os
+
+
+class FileManager:
+    """Класс для безопасной работы с текстовыми файлами (Средняя № 9)."""
+
+    def __init__(self, filepath: str) -> None:
+        if not filepath or not isinstance(filepath, str):
+            raise ValueError("Путь к файлу должен быть непустой строкой.")
+        self.filepath: str = filepath
+
+    def write(self, content: str, mode: str = "w") -> None:
+        """Запись или дозапись текста в файл."""
+        if mode not in ("w", "a"):
+            raise ValueError("Поддерживаются только режимы записи 'w' и дозаписи 'a'.")
+        with open(self.filepath, mode=mode, encoding="utf-8") as file:
+            file.write(content)
+
+    def read(self) -> str:
+        """Чтение содержимого файла."""
+        if not self.exists():
+            raise FileNotFoundError(f"Файл '{self.filepath}' не существует.")
+        with open(self.filepath, mode="r", encoding="utf-8") as file:
+            return file.read()
+
+    def exists(self) -> bool:
+        """Проверка существования файла."""
+        return os.path.exists(self.filepath)
+
+    def delete(self) -> bool:
+        """Удаление файла при его наличии."""
+        if self.exists():
+            os.remove(self.filepath)
+            return True
+        return False
